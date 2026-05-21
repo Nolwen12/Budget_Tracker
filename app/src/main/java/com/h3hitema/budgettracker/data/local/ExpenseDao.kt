@@ -12,7 +12,7 @@ interface ExpenseDao{
     suspend fun getAllExpense(): List<ExpenseEntity>
 
     @Query("SELECT * FROM expense WHERE id = :expenseId LIMIT 1")
-    suspend fun getTaskById(expenseId: Int): ExpenseEntity?
+    suspend fun getExpenseById(expenseId: Int): ExpenseEntity?
 
     @Insert
     suspend fun insertExpense(expense: ExpenseEntity): Long

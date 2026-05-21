@@ -12,7 +12,7 @@ interface CategoryDao{
     suspend fun getAllCategory(): List<CategoryEntity>
 
     @Query("SELECT * FROM category WHERE id = :categoryId LIMIT 1")
-    suspend fun getTaskById(categoryId: Int): CategoryEntity?
+    suspend fun getCategoryById(categoryId: Int): CategoryEntity?
 
     @Insert
     suspend fun insertCategory(category: CategoryEntity): Long
