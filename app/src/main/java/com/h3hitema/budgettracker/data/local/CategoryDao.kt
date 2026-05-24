@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Transaction
 
 @Dao
 interface CategoryDao{
@@ -31,4 +32,8 @@ interface CategoryDao{
 
     @Query("SELECT COUNT(*) FROM category")
     suspend fun countCategory(): Int
+
+    @Transaction
+    @Query("SELECT * FROM category WHERE id = :categoryId")
+    suspend fun getCategoryWithExpenses(categoryId: Long): CategoryWithExpenses
 }

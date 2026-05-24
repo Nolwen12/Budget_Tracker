@@ -6,14 +6,15 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [ExpenseEntity::class],
+    entities = [CategoryEntity::class, ExpenseEntity::class],
     version = 1,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
     // Room génère l'implémentation concrète du DAO au moment de la compilation.
-    abstract fun taskDao(): ExpenseDao
+    abstract fun categoryDao(): CategoryDao
+    abstract fun expenseDao(): ExpenseDao
 
     companion object {
         private const val DATABASE_NAME = "todo_database"

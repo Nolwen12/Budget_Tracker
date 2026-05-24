@@ -14,15 +14,15 @@ class ExpenseRepository (
             return expenseDao.getAllExpense()
         }
 
-        suspend fun addExpense(title: String, amount: Double, date: Date, category: CategoryEntity, note: String): ExpenseEntity {
+        suspend fun addExpense(title: String, amount: Double, date: Date, categoryId: Long, note: String): ExpenseEntity {
             // id = 0 indique à Room qu'il doit générer l'identifiant.
             val entityToInsert = ExpenseEntity(
                 id = 0,
                 title = title,
                 amount = amount,
                 date = date,
-                category = category,
-                note = note
+                note = note,
+                categoryId = categoryId,
             )
 
             // insertExpense retourne l'ID SQLite généré automatiquement.
@@ -33,8 +33,8 @@ class ExpenseRepository (
                 title = title,
                 amount = amount,
                 date = date,
-                category = category,
-                note = note
+                note = note,
+                categoryId = categoryId
             )
         }
 

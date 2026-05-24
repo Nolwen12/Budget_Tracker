@@ -91,4 +91,7 @@ class CategoryRepository (
 
         }
     }
+
+    suspend fun getCategoryWithExpenses(categoryId: Long) =
+        categoryDao.getCategoryWithExpenses(categoryId)
 }
