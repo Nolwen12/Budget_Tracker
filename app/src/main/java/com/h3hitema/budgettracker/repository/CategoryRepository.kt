@@ -1,7 +1,9 @@
 package com.h3hitema.budgettracker.repository
 
+import androidx.lifecycle.LiveData
 import com.h3hitema.budgettracker.data.local.CategoryEntity
 import com.h3hitema.budgettracker.data.local.CategoryDao
+import com.h3hitema.budgettracker.data.local.CategoryWithExpenses
 
 class CategoryRepository (
     private val categoryDao: CategoryDao
@@ -94,4 +96,12 @@ class CategoryRepository (
 
     suspend fun getCategoryWithExpenses(categoryId: Long) =
         categoryDao.getCategoryWithExpenses(categoryId)
+
+    fun getAllCategories(): LiveData<List<CategoryEntity>> {
+        return categoryDao.getAllCategoryLiveData()
+    }
+
+    fun getCategoriesWithExpenses(): LiveData<List<CategoryWithExpenses>> {
+        return categoryDao.getCategoriesWithExpenses()
+    }
 }

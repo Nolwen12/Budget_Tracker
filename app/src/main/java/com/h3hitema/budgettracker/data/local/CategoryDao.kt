@@ -1,5 +1,6 @@
 package com.h3hitema.budgettracker.data.local
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -36,4 +37,11 @@ interface CategoryDao{
     @Transaction
     @Query("SELECT * FROM category WHERE id = :categoryId")
     suspend fun getCategoryWithExpenses(categoryId: Long): CategoryWithExpenses
+
+    @Query("SELECT * FROM category ORDER BY id DESC")
+    fun getAllCategoryLiveData(): LiveData<List<CategoryEntity>>
+
+    @Transaction
+    @Query("SELECT * FROM category")
+    fun getCategoriesWithExpenses(): LiveData<List<CategoryWithExpenses>>
 }

@@ -1,12 +1,8 @@
 package com.h3hitema.budgettracker.data.local
 
 import androidx.room.ColumnInfo
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.Relation
-import java.sql.Date
-import java.util.Locale
 
 @Entity(tableName = "expense")
 data class ExpenseEntity(
@@ -20,7 +16,7 @@ data class ExpenseEntity(
     val amount: Double,
 
     @ColumnInfo(name = "date")
-    val date: Date,
+    val date: java.util.Date,
 
     @ColumnInfo(name = "note")
     val note: String,

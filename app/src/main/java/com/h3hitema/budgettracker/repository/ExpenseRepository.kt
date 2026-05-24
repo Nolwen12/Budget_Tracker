@@ -1,9 +1,8 @@
 package com.h3hitema.budgettracker.repository
 
+import androidx.lifecycle.LiveData
 import com.h3hitema.budgettracker.data.local.ExpenseEntity
-import com.h3hitema.budgettracker.data.local.CategoryEntity
 import com.h3hitema.budgettracker.data.local.ExpenseDao
-import com.h3hitema.budgettracker.data.local.CategoryDao
 import java.sql.Date
 
 class ExpenseRepository (
@@ -69,6 +68,10 @@ class ExpenseRepository (
 
     suspend fun clearAll() {
         expenseDao.deleteAllExpense()
+    }
+
+    fun getAllExpenses(): LiveData<List<ExpenseEntity>> {
+        return expenseDao.getAllExpenseLiveData()
     }
 //vérifier si besoin de mettre des dépenses automatique
 //    suspend fun insertInitialExpenseIfNeeded() {

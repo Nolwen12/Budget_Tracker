@@ -1,5 +1,6 @@
 package com.h3hitema.budgettracker.data.local
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -31,4 +32,7 @@ interface ExpenseDao{
 
     @Query("SELECT COUNT(*) FROM expense")
     suspend fun countExpense(): Int
+
+    @Query("SELECT * FROM expense ORDER BY id DESC")
+    fun getAllExpenseLiveData(): LiveData<List<ExpenseEntity>>
 }

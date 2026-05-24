@@ -8,5 +8,6 @@ data class Expense(
     val amount: Double,
     val date: Date,
     val note: String,
-    val categoryId: Long
+    val categoryId: Long,
+    val categoryName: String = ""
 )

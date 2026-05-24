@@ -5,61 +5,45 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.h3hitema.budgettracker.data.local.AppDatabase
 import com.h3hitema.budgettracker.data.local.ExpenseEntity
 import com.h3hitema.budgettracker.model.Expense
+import com.h3hitema.budgettracker.repository.CategoryRepository
 import com.h3hitema.budgettracker.repository.ExpenseRepository
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import java.util.Date
+import androidx.lifecycle.map
+import com.h3hitema.budgettracker.mapper.toEntity
+import com.h3hitema.budgettracker.mapper.toExpense
 
-class ExpenseViewModel(application: Application) : AndroidViewModel(application) {
+class ExpenseViewModel(
+    private val expenseRepository: ExpenseRepository,
+    private val categoryRepository: CategoryRepository
+) : ViewModel() {
+
     companion object {
         private const val TAG = "BudgetTracker"
     }
 
-    private val repository: ExpenseRepository
+    // ── LiveData des dépenses avec categoryName rempli ──────────
+    val expenses: LiveData<List<Expense>> = categoryRepository.getCategoriesWithExpenses().map { categoriesWithExpenses ->
+        categoriesWithExpenses.flatMap { categoryWithExpenses ->
+            categoryWithExpenses.expenses.map { entity ->
+                entity.toExpense(categoryName = categoryWithExpenses.category.wording)
+            }
+        }
+    }
 
-    // LiveData observée par l'Activity : chaque nouvelle valeur déclenche un rendu UI.
-    private val _expense = MutableLiveData<List<ExpenseEntity>>(emptyList())
-    val expense: LiveData<List<ExpenseEntity>> = _expense
-
+    // ── Chargement ───────────────────────────────────────────────
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
 
+    // ── Sélections utilisateur ───────────────────────────────────
     var selectedCategoryId: Long = 0L
     var selectedDate: Date = Date()
-
-    init {
-        val database = AppDatabase.getDatabase(application)
-        repository = ExpenseRepository(database.expenseDao())
-
-        // L'initialisation reste dans le ViewModel pour ne pas charger l'Activity.
-        initializeData()
-    }
-
-    private fun initializeData() {
-        viewModelScope.launch {
-            _isLoading.value = true
-            
-            loadExpense()
-
-            // Quand isLoading repasse à false, l'écran peut masquer le chargement.
-            _isLoading.value = false
-
-            Log.d(TAG, "Données initialisées")
-        }
-    }
-
-    fun loadExpense() {
-        viewModelScope.launch {
-            val expenseList = repository.getExpense()
-            // Cette affectation notifie automatiquement les observers LiveData.
-            _expense.value = expenseList
-
-            Log.d(TAG, "Dépenses chargées : ${expenseList.size}")
-        }
-    }
 
     fun onDateSelected(year: Int, month: Int, day: Int) {
         val calendar = Calendar.getInstance()
@@ -67,12 +51,11 @@ class ExpenseViewModel(application: Application) : AndroidViewModel(application)
         selectedDate = calendar.time
     }
 
-    fun addExpense(title: String, amount: Double, note : String) {
+    // ── CRUD ─────────────────────────────────────────────────────
+    fun addExpense(title: String, amountStr: String, note: String) {
         val cleanedTitle = title.trim()
-        val cleanedAmount = amount.trim().toDoubleOrNull()
-        val cleanedDate: Date = selectedDate
+        val cleanedAmount = amountStr.trim().toDoubleOrNull()
         val cleanedNote = note.trim()
-        val cleanedCategory = selectedCategoryId
 
         if (cleanedTitle.isEmpty()) {
             Log.d(TAG, "Ajout refusé : titre vide")
@@ -80,34 +63,28 @@ class ExpenseViewModel(application: Application) : AndroidViewModel(application)
         }
 
         if (cleanedAmount == null || cleanedAmount <= 0.0) {
-            Log.d(TAG, "Ajout refusé : montant vide")
+            Log.d(TAG, "Ajout refusé : montant invalide")
             return
         }
 
         viewModelScope.launch {
-            // Toutes les écritures Room passent par une coroutine pour ne pas bloquer l'UI.
-            val createdExpense = repository.addExpense(
+            val createdExpense = expenseRepository.addExpense(
                 title = cleanedTitle,
                 amount = cleanedAmount,
-                date = cleanedDate,
+                date = selectedDate as java.sql.Date,
                 note = cleanedNote,
-                categoryId = cleanedCategory,
+                categoryId = selectedCategoryId
             )
-
-            // Après modification en base, on recharge la source de vérité.
-            loadExpense()
-
-            Log.d(TAG, "Dépense ajoutée en base : $createdExpense")
+            Log.d(TAG, "Dépense ajoutée : $createdExpense")
         }
     }
 
-    fun deleteExpense(expense: ExpenseEntity) {
+    fun deleteExpense(expense: Expense) {
         viewModelScope.launch {
-            val deleted = repository.deleteExpense(expense)
+            val deleted = expenseRepository.deleteExpense(expense.toEntity())
 
             if (deleted) {
-                loadExpense()
-                Log.d(TAG, "Dépense supprimée en base : $expense")
+                Log.d(TAG, "Dépense supprimée : $expense")
             } else {
                 Log.d(TAG, "Suppression impossible : dépense introuvable")
             }
@@ -116,10 +93,8 @@ class ExpenseViewModel(application: Application) : AndroidViewModel(application)
 
     fun clearAllExpense() {
         viewModelScope.launch {
-            repository.clearAll()
-            loadExpense()
-
-            Log.d(TAG, "Toutes les dépenses ont été supprimées")
+            expenseRepository.clearAll()
+            Log.d(TAG, "Toutes les dépenses supprimées")
         }
     }
 }

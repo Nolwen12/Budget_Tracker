@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Budget Tracker</string>
     <string name="expense_title">Budget Tracker</string>
+
+    <string name="expense_name">Mes dépenses</string>
+    <string name="expense_add_name">Ajoutez une dépense</string>
+    <string name="monthly_budget_name">Mon budget mensuel</string>
+    <string name="statistics_name">Statistiques</string>
 </resources>

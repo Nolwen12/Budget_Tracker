@@ -4,14 +4,28 @@
     <color name="card_background">#FFFFFF</color>
 
     <color name="primary_blue">#1565C0</color>
-    <color name="primary_dark">#0D47A1</color>
 
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#616161</color>
     <color name="text_light">#FFFFFF</color>
 
-    <color name="separator">#E0E0E0</color>
     <color name="danger_red">#C62828</color>
     <color name="success_green">#2E7D32</color>
     <color name="empty_state_background">#E3F2FD</color>
+
+    <!-- Couleur principale -->
+    <color name="primary">#1976D2</color>
+    <color name="primary_dark">#0D47A1</color>
+    <color name="primary_light">#BBDEFB</color>
+
+    <!-- Couleurs par catégorie -->
+    <color name="category_food">#EF9A9A</color>        <!-- Rouge clair -->
+    <color name="category_transport">#90CAF9</color>   <!-- Bleu clair -->
+    <color name="category_shopping">#CE93D8</color>    <!-- Violet clair -->
+    <color name="category_health">#A5D6A7</color>      <!-- Vert clair -->
+    <color name="category_other">#FFE082</color>       <!-- Jaune clair -->
+
+    <!-- Généraux -->
+    <color name="text_primary">#212121</color>         <!-- Noir -->
+    <color name="text_secondary">#757575</color>       <!-- Gris -->
+    <color name="separator">#E0E0E0</color>            <!-- Gris clair -->
+    <color name="white">#FFFFFF</color>
 </resources>
