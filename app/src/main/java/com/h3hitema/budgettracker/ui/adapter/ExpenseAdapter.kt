@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +22,7 @@ class ExpenseAdapter (
 
     class ExpenseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // Le ViewHolder garde les références des vues d'une ligne RecyclerView.
-        val llCategoryBackground : TextView = itemView.findViewById(R.id.llCategoryBackground)
+        val llCategoryBackground : LinearLayout = itemView.findViewById(R.id.llCategoryBackground)
         val tvCategory : TextView = itemView.findViewById<TextView>(R.id.tvCategory)
         val tvDate : TextView = itemView.findViewById<TextView>(R.id.tvDate)
         val tvTitle : TextView = itemView.findViewById<TextView>(R.id.tvTitle)

@@ -8,12 +8,12 @@ import com.h3hitema.budgettracker.data.local.CategoryWithExpenses
 class CategoryRepository (
     private val categoryDao: CategoryDao
 ) {
-    suspend fun getCategorys(): List<CategoryEntity> {
+    suspend fun getCategory(): List<CategoryEntity> {
         // Le Repository masque Room au reste de l'application.
         return categoryDao.getAllCategory()
     }
 
-    suspend fun addCategory(title: String, wording: String): CategoryEntity {
+    suspend fun addCategory(wording: String): CategoryEntity {
         // id = 0 indique à Room qu'il doit générer l'identifiant.
         val entityToInsert = CategoryEntity(
             id = 0,

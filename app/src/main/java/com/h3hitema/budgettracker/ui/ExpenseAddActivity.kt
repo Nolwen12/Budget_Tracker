@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import com.h3hitema.budgettracker.R
 import com.h3hitema.budgettracker.data.local.AppDatabase
@@ -23,7 +24,7 @@ class ExpenseAddActivity : AppCompatActivity() {
     // Variables UI
     private lateinit var etTitle: TextInputEditText
     private lateinit var etAmount: TextInputEditText
-    private lateinit var etCategory: TextInputEditText
+    private lateinit var etCategory: MaterialAutoCompleteTextView
     private lateinit var etDate: TextInputEditText
     private lateinit var etNote: TextInputEditText
     private lateinit var btnSave: Button
@@ -93,7 +94,7 @@ class ExpenseAddActivity : AppCompatActivity() {
 
     private fun setupDatePicker() {
         // Date par défaut = aujourd'hui
-        etDate.setText(sdf.format(Date()), false)
+        etDate.setText(sdf.format(Date()))
         expenseViewModel.selectedDate = Date()
 
         etDate.setOnClickListener {
@@ -104,7 +105,7 @@ class ExpenseAddActivity : AppCompatActivity() {
                 this,
                 { _, year, month, dayOfMonth ->
                     expenseViewModel.onDateSelected(year, month, dayOfMonth)
-                    etDate.setText(sdf.format(expenseViewModel.selectedDate), false)
+                    etDate.setText(sdf.format(expenseViewModel.selectedDate))
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
@@ -172,6 +173,7 @@ class ExpenseAddActivity : AppCompatActivity() {
         }
 
         // Sauvegarder via ViewModel
+        expenseViewModel.selectedCategoryId = categoryId
         expenseViewModel.addExpense(title, amountStr, note)
         
         Toast.makeText(this, "Dépense ajoutée avec succès", Toast.LENGTH_SHORT).show()

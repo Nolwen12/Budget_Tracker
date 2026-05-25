@@ -3,7 +3,7 @@ package com.h3hitema.budgettracker.repository
 import androidx.lifecycle.LiveData
 import com.h3hitema.budgettracker.data.local.ExpenseEntity
 import com.h3hitema.budgettracker.data.local.ExpenseDao
-import java.sql.Date
+import java.util.Date
 
 class ExpenseRepository (
     private val expenseDao: ExpenseDao

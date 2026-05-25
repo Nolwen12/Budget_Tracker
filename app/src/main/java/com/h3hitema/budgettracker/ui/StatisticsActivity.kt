@@ -255,14 +255,14 @@ class StatisticsActivity : AppCompatActivity() {
     }
 
     private fun updateCategoriesList(expenses: List<com.h3hitema.budgettracker.model.Expense>) {
-        // Regrouper les dépenses par catégorie
+        // Regrouper les dÃ©penses par catÃ©gorie
         val categoryStats = expenses.groupBy { it.categoryName }
-            .mapValues { (categoryName, categoryExpenses) ->
+            .map { (categoryName, categoryExpenses) ->
                 CategoryStat(
                     name = categoryName,
                     total = categoryExpenses.sumOf { it.amount },
                     count = categoryExpenses.size,
-                    average = categoryExpenses.sumOf { it.amount } / categoryExpenses.size
+                    average = if (categoryExpenses.isEmpty()) 0.0 else categoryExpenses.sumOf { it.amount } / categoryExpenses.size
                 )
             }
             .sortedByDescending { it.total }

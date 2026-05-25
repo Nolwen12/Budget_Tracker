@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.h3hitema.budgettracker.data.local.AppDatabase
 import com.h3hitema.budgettracker.data.local.CategoryEntity
-import com.h3hitema.budgettracker.model.Category
 import com.h3hitema.budgettracker.repository.CategoryRepository
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -45,7 +44,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
             // Quand isLoading repasse à false, l'écran peut masquer le chargement.
             _isLoading.value = false
 
-            Log.d(CategoryViewModel.Companion.TAG, "Catégorie initialisées")
+            Log.d(TAG, "Catégorie initialisées")
         }
     }
 
@@ -55,7 +54,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
             // Cette affectation notifie automatiquement les observers LiveData.
             _category.value = categoryList
 
-            Log.d(CategoryViewModel.Companion.TAG, "Catégorie chargées : ${categoryList.size}")
+            Log.d(TAG, "Catégorie chargées : ${categoryList.size}")
         }
     }
 
@@ -63,7 +62,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
         val cleanedWording = wording.trim()
 
         if (cleanedWording.isEmpty()) {
-            Log.d(CategoryViewModel.Companion.TAG, "Ajout refusé : titre vide")
+            Log.d(TAG, "Ajout refusé : titre vide")
             return
         }
 
@@ -76,7 +75,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
             // Après modification en base, on recharge la source de vérité.
             loadCategory()
 
-            Log.d(CategoryViewModel.Companion.TAG, "Catégorie ajoutée en base : $createdCategory")
+            Log.d(TAG, "Catégorie ajoutée en base : $createdCategory")
         }
     }
 
@@ -86,9 +85,9 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
 
             if (deleted) {
                 loadCategory()
-                Log.d(CategoryViewModel.Companion.TAG, "Catégorie supprimée en base : $category")
+                Log.d(TAG, "Catégorie supprimée en base : $category")
             } else {
-                Log.d(CategoryViewModel.Companion.TAG, "Suppression impossible : catégorie introuvable")
+                Log.d(TAG, "Suppression impossible : catégorie introuvable")
             }
         }
     }
@@ -98,7 +97,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
             repository.clearAll()
             loadCategory()
 
-            Log.d(CategoryViewModel.Companion.TAG, "Toutes les catégories ont été supprimées")
+            Log.d(TAG, "Toutes les catégories ont été supprimées")
         }
     }
     

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,7 +28,7 @@ class ExpenseActivity : AppCompatActivity() {
     // Variables
     private lateinit var rvExpenses: RecyclerView
     private lateinit var btnAddExpense: Button
-    private lateinit var tvEmpty: EditText
+    private lateinit var tvEmpty: TextView
     private lateinit var expenseAdapter: ExpenseAdapter
     private lateinit var expenseViewModel: ExpenseViewModel
 
@@ -43,6 +44,7 @@ class ExpenseActivity : AppCompatActivity() {
         setupRecyclerView()
         setupViewModel()
         configureListeners()
+        observeViewModel()
 
         Log.d(TAG, "ExpenseActivity créée")
     }

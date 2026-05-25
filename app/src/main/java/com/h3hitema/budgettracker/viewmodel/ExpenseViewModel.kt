@@ -24,13 +24,26 @@ class ExpenseViewModel(
     private val categoryRepository: CategoryRepository
 ) : ViewModel() {
 
+    init {
+        viewModelScope.launch {
+            categoryRepository.insertInitialCategoryIfNeeded()
+            Log.d(TAG, "Catégories initialisées")
+
+            // Vérification
+            val count = categoryRepository.count()
+            Log.d(TAG, "Nombre de catégories en base : $count")
+        }
+    }
+
     companion object {
         private const val TAG = "BudgetTracker"
     }
 
     // ── LiveData des dépenses avec categoryName rempli ──────────
     val expenses: LiveData<List<Expense>> = categoryRepository.getCategoriesWithExpenses().map { categoriesWithExpenses ->
+        Log.d(TAG, "Catégories reçues : ${categoriesWithExpenses.size}")
         categoriesWithExpenses.flatMap { categoryWithExpenses ->
+            Log.d(TAG, "Catégorie : ${categoryWithExpenses.category.wording}, expenses : ${categoryWithExpenses.expenses.size}")
             categoryWithExpenses.expenses.map { entity ->
                 entity.toExpense(categoryName = categoryWithExpenses.category.wording)
             }
@@ -71,7 +84,7 @@ class ExpenseViewModel(
             val createdExpense = expenseRepository.addExpense(
                 title = cleanedTitle,
                 amount = cleanedAmount,
-                date = selectedDate as java.sql.Date,
+                date = selectedDate as java.util.Date,
                 note = cleanedNote,
                 categoryId = selectedCategoryId
             )

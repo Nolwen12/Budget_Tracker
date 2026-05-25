@@ -129,11 +129,11 @@ class MonthlyBudgetActivity : AppCompatActivity() {
 
         // Changer la couleur du reste selon le contexte
         if (remaining < 0) {
-            tvMonthlyRemaining.setTextColor(getColor(R.color.design_default_color_error))
+            tvMonthlyRemaining.setTextColor(getColor(R.color.danger_red))
         } else if (remaining < monthlyBudget * 0.2) {
             tvMonthlyRemaining.setTextColor(getColor(android.R.color.holo_orange_dark))
         } else {
-            tvMonthlyRemaining.setTextColor(getColor(R.color.design_default_color_primary))
+            tvMonthlyRemaining.setTextColor(getColor(R.color.primary))
         }
 
         Log.d(TAG, "Budget mis à jour: $monthlyBudget€, dépensé: $totalSpent€, reste: $remaining€")
